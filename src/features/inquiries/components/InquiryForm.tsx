@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { toast } from 'sonner'
 import { FaSpinner } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
+import { useTranslations } from 'next-intl'
 
 import ImagBg from '@/assets/waitlist.webp'
 import {
@@ -34,6 +35,7 @@ import {
 } from '@/features/inquiries/schemas/inquiry.schema'
 
 export default function InquiryForm({ config }: { config?: SiteConfig }) {
+  const t = useTranslations('Inquiry')
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [fileName, setFileName] = useState<string>('')
   const [loading, setLoading] = useState(false)
@@ -67,15 +69,9 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
       const data = await res.json()
 
       if (!res.ok) {
-        toast.error(
-          data.error || 'Could not submit your inquiry. Please try again.',
-        )
+        toast.error(data.error || t('toast_error_default'))
       } else {
-        toast.success(
-          data.mock
-            ? 'Inquiry received! (Development mock mode)'
-            : 'Your request was submitted successfully! Our team will get back to you shortly.',
-        )
+        toast.success(data.mock ? t('toast_mock') : t('toast_success'))
         form.reset()
         setFileName('')
         if (fileInputRef.current) {
@@ -84,9 +80,7 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
       }
     } catch (err) {
       console.error('Inquiry submission error:', err)
-      toast.error(
-        'Network error occurred. Please check your connection and try again.',
-      )
+      toast.error(t('toast_network_error'))
     } finally {
       setLoading(false)
     }
@@ -100,12 +94,19 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
     }
   }
 
+  const getTopicLabel = (topic: string) => {
+    if (topic === 'Partner Inquiry') return t('topic_partner')
+    if (topic === 'Product Information') return t('topic_info')
+    if (topic === 'Product Quality') return t('topic_quality')
+    return topic
+  }
+
   return (
     <div className="relative pb-10">
       <div className="container">
         <div className="relative z-10 mx-auto mt-16 w-full max-w-2xl border border-[#DDDDDD] bg-white px-6 py-12 shadow-sm md:px-11">
           <h1 className="mb-8 text-pretty font-amiri text-2xl font-medium uppercase text-primary md:text-3xl lg:text-4xl">
-            {config?.request || 'Submit a Request'}
+            {t('request')}
           </h1>
           <Form {...form}>
             <form
@@ -119,7 +120,8 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-varela text-sm capitalize text-primary">
-                      Topic<sup>*</sup>
+                      {t('topic_label')}
+                      <sup>*</sup>
                     </FormLabel>
                     <FormControl>
                       <Select
@@ -128,10 +130,10 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
                         defaultValue={field.value}
                       >
                         <SelectTrigger
-                          aria-label="Select topic"
+                          aria-label={t('topic_placeholder')}
                           className="h-auto w-full rounded-none border-[#DDDDDD] py-4 text-primary focus-visible:ring-1 focus-visible:ring-primary"
                         >
-                          <SelectValue placeholder="Choose a topic" />
+                          <SelectValue placeholder={t('topic_placeholder')} />
                         </SelectTrigger>
                         <SelectContent className="rounded-none border-[#DDDDDD] bg-white shadow-md">
                           {INQUIRY_TOPICS.map((topic) => (
@@ -140,7 +142,7 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
                               value={topic}
                               className="cursor-pointer py-3 text-sm text-primary hover:bg-[#F1F1F1]"
                             >
-                              {topic}
+                              {getTopicLabel(topic)}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -157,11 +159,12 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-varela text-sm capitalize text-primary">
-                      Description<sup>*</sup>
+                      {t('description_label')}
+                      <sup>*</sup>
                     </FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Tell us how we can help you..."
+                        placeholder={t('description_placeholder')}
                         className="min-h-28 resize-none rounded-none border-[#DDDDDD] p-3 text-primary shadow-none focus-visible:ring-1 focus-visible:ring-primary"
                         {...field}
                       />
@@ -177,12 +180,13 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-varela text-sm capitalize text-primary">
-                      Your Email Address<sup>*</sup>
+                      {t('email_label')}
+                      <sup>*</sup>
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="email"
-                        placeholder="you@example.com"
+                        placeholder={t('email_placeholder')}
                         className="h-auto rounded-none border-[#DDDDDD] px-3 py-3 text-primary shadow-none focus-visible:ring-1 focus-visible:ring-primary"
                         {...field}
                       />
@@ -198,7 +202,7 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-varela text-sm capitalize text-primary">
-                      Attachments (Optional, max 5MB)
+                      {t('attachment_label')}
                     </FormLabel>
                     <FormControl>
                       <div className="space-y-4">
@@ -207,8 +211,7 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
                           className="w-full rounded-none border border-dashed border-[#B0B0B0] py-4 font-varela text-sm text-primary transition-colors hover:border-primary hover:bg-[#F9FBF9] focus:outline-none focus:ring-1 focus:ring-primary"
                           onClick={() => fileInputRef.current?.click()}
                         >
-                          📎 Add file or drop files here (.jpg, .png, .webp,
-                          .pdf)
+                          {t('attachment_button')}
                         </button>
 
                         {fileName && (
@@ -220,7 +223,7 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
                               type="button"
                               onClick={handleClearAttachment}
                               className="p-1 text-[#6E6E6E] hover:text-primary"
-                              aria-label="Remove attached file"
+                              aria-label={t('attachment_remove')}
                             >
                               <IoClose className="h-4 w-4" />
                             </button>
@@ -260,12 +263,11 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
                   {loading ? (
                     <>
                       <FaSpinner className="h-4 w-4 animate-spin" />
-                      Submitting...
+                      {t('submitting')}
                     </>
                   ) : (
                     <>
-                      {config?.submit || 'Submit'}{' '}
-                      <Icons.rightArrow className="h-4 w-4" />
+                      {t('submit')} <Icons.rightArrow className="h-5 w-5" />
                     </>
                   )}
                 </button>

@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { Suspense } from 'react'
 import {
   Select,
   SelectContent,
@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/select'
 import { Locale, locales, languageNames } from '@/i18n/request'
 import { usePathname, useRouter } from '@/i18n/routing'
+import { useSearchParams } from 'next/navigation'
 
 interface LanguageToggleProps {
   locale: Locale
@@ -16,17 +17,20 @@ interface LanguageToggleProps {
   scroll?: boolean
 }
 
-export default function LanguageSelector({
+function LanguageSelectorContent({
   locale,
   width,
   scroll,
 }: LanguageToggleProps) {
   const router = useRouter()
   const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   const switchLanguage = (newLocale: string) => {
     if (newLocale === locale) return
-    router.replace(pathname, { locale: newLocale as Locale })
+    const queryString = searchParams?.toString()
+    const target = queryString ? `${pathname}?${queryString}` : pathname
+    router.replace(target, { locale: newLocale as Locale })
   }
 
   const headerCo =
@@ -58,5 +62,19 @@ export default function LanguageSelector({
         </SelectContent>
       </Select>
     </div>
+  )
+}
+
+export default function LanguageSelector(props: LanguageToggleProps) {
+  return (
+    <Suspense
+      fallback={
+        <div
+          className={`font-mono ${props.width ? props.width : 'min-w-[16rem]'} tracking-widest`}
+        />
+      }
+    >
+      <LanguageSelectorContent {...props} />
+    </Suspense>
   )
 }

@@ -133,7 +133,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
 
           {/* Mobile Nav Links */}
           <div
-            className={`fixed ${isOpen ? 'translate-x-0' : '-translate-x-[100vw]'} inset-0 z-50 h-screen bg-white transition-transform delay-100 duration-300 ease-in-out`}
+            className={`fixed ${isOpen ? 'translate-x-0 opacity-100' : 'pointer-events-none invisible -translate-x-[100vw] opacity-0'} inset-0 z-50 h-screen bg-white transition-all delay-100 duration-300 ease-in-out`}
           >
             <section className="container border-b border-[#E6E6E6] py-2">
               <div className="relative flex min-h-16 w-full items-center justify-between">
