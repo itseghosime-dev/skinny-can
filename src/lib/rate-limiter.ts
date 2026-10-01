@@ -24,7 +24,8 @@ export async function checkRateLimitDetails(
   maxRequests = MAX_REQUESTS_PER_WINDOW,
   windowMs = RATE_LIMIT_WINDOW_MS,
 ): Promise<RateLimitResult> {
-  const redisUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL
+  const redisUrl =
+    process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL
   const redisToken =
     process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN
 
@@ -35,9 +36,12 @@ export async function checkRateLimitDetails(
       const key = `rate_limit:inquiry:${ip}`
 
       // Increment counter in Redis
-      const incrRes = await fetch(`${redisUrl}/incr/${encodeURIComponent(key)}`, {
-        headers: { Authorization: `Bearer ${redisToken}` },
-      })
+      const incrRes = await fetch(
+        `${redisUrl}/incr/${encodeURIComponent(key)}`,
+        {
+          headers: { Authorization: `Bearer ${redisToken}` },
+        },
+      )
 
       if (incrRes.ok) {
         const incrData = await incrRes.json()
@@ -80,7 +84,10 @@ export async function checkRateLimitDetails(
   if (validTimestamps.length >= maxRequests) {
     inMemoryRateLimitMap.set(ip, validTimestamps)
     const oldest = validTimestamps[0]
-    const resetInSeconds = Math.max(1, Math.ceil((oldest + windowMs - now) / 1000))
+    const resetInSeconds = Math.max(
+      1,
+      Math.ceil((oldest + windowMs - now) / 1000),
+    )
     return {
       allowed: false,
       remaining: 0,

@@ -38,7 +38,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.9,
         alternates: {
           languages: Object.fromEntries(
-            INDEXABLE_LOCALES.map((l) => [l, `${baseUrl}/${l}/product/${product.slug}`]),
+            INDEXABLE_LOCALES.map((l) => [
+              l,
+              `${baseUrl}/${l}/product/${product.slug}`,
+            ]),
           ),
         },
       })
