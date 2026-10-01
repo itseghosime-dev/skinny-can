@@ -1,7 +1,7 @@
 import React from 'react'
 import Invite from '@/assets/waitlist_bg.webp'
 import BackingBg from '@/assets/backings_bg.svg'
-import { unstable_setRequestLocale } from 'next-intl/server'
+import { getTranslations, unstable_setRequestLocale } from 'next-intl/server'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import StoryBanner from '@/components/StoryBanner'
@@ -16,12 +16,12 @@ interface PageProps {
 export async function generateMetadata({
   params: { locale },
 }: PageProps): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'Metadata' })
   const baseUrl = env.NEXT_PUBLIC_SITE_URL
 
   return {
-    title: 'Partner with Skinny Cans — Distribution, Retail & Supply Chain',
-    description:
-      'Join our mission to revolutionize the RTD alcohol market. Strategic distribution partnerships, warehouse logistics, and global expansion details.',
+    title: t('partner_title'),
+    description: t('partner_desc'),
     alternates: {
       canonical: `${baseUrl}/${locale}/partner`,
       languages: {
@@ -31,8 +31,8 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      title: 'Partner with Skinny Cans',
-      description: 'Scaled production and strategic logistics partnerships.',
+      title: `${t('partner_title')} | Skinny Cans`,
+      description: t('partner_desc'),
       url: `${baseUrl}/${locale}/partner`,
     },
   }

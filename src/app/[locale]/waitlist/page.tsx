@@ -1,5 +1,5 @@
 import React from 'react'
-import { unstable_setRequestLocale } from 'next-intl/server'
+import { getTranslations, unstable_setRequestLocale } from 'next-intl/server'
 import { Metadata } from 'next'
 import { getSiteConfig } from '@/config/site-i18n'
 import WaitlistForm from '@/components/WaitlistForm'
@@ -13,12 +13,12 @@ interface PageProps {
 export async function generateMetadata({
   params: { locale },
 }: PageProps): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'Metadata' })
   const baseUrl = env.NEXT_PUBLIC_SITE_URL
 
   return {
-    title: 'Contact Us & Partner Waiting List | Skinny Cans',
-    description:
-      'Submit an inquiry or join the waiting list for Skinny Cans. Inquiries for commercial partnerships, retail distribution, and product information.',
+    title: t('waitlist_title'),
+    description: t('waitlist_desc'),
     alternates: {
       canonical: `${baseUrl}/${locale}/waitlist`,
       languages: {
@@ -28,8 +28,8 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      title: 'Join the Waiting List | Skinny Cans',
-      description: 'Submit a partnership request or product inquiry.',
+      title: `${t('waitlist_title')} | Skinny Cans`,
+      description: t('waitlist_desc'),
       url: `${baseUrl}/${locale}/waitlist`,
     },
   }

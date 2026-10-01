@@ -1,5 +1,5 @@
 import Collections from '@/components/Collections'
-import { unstable_setRequestLocale } from 'next-intl/server'
+import { getTranslations, unstable_setRequestLocale } from 'next-intl/server'
 import { Metadata } from 'next'
 import React from 'react'
 import { Locale } from '@/i18n/request'
@@ -12,12 +12,12 @@ interface PageProps {
 export async function generateMetadata({
   params: { locale },
 }: PageProps): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'Metadata' })
   const baseUrl = env.NEXT_PUBLIC_SITE_URL
 
   return {
-    title: 'Products — Hard Lemonade & Hard Berries RTD Beverages',
-    description:
-      'Explore the Skinny Cans beverage collection. 100% organic vodka cocktails with zero sugar, only 57 kcal, and hand-picked Sicilian ingredients.',
+    title: t('product_title'),
+    description: t('product_desc'),
     alternates: {
       canonical: `${baseUrl}/${locale}/product`,
       languages: {
@@ -27,9 +27,8 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      title: 'Our Products | Skinny Cans',
-      description:
-        'Zero sugar, 4% alc, organic vodka canned cocktails crafted for tomorrow.',
+      title: `${t('product_title')} | Skinny Cans`,
+      description: t('product_desc'),
       url: `${baseUrl}/${locale}/product`,
     },
   }

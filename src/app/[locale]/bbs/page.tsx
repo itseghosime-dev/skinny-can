@@ -1,5 +1,5 @@
 import StoryBanner from '@/components/StoryBanner'
-import { unstable_setRequestLocale } from 'next-intl/server'
+import { getTranslations, unstable_setRequestLocale } from 'next-intl/server'
 import { Metadata } from 'next'
 import React from 'react'
 import BBSBg from '@/assets/bbs.webp'
@@ -16,12 +16,12 @@ interface PageProps {
 export async function generateMetadata({
   params: { locale },
 }: PageProps): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'Metadata' })
   const baseUrl = env.NEXT_PUBLIC_SITE_URL
 
   return {
-    title: 'The Science of Smarter Drinking — BBS Research & Evidence',
-    description:
-      'Discover the clinical research behind sugar-free alcohol. Why sugar and alcohol combined trigger severe metabolic inflammation, and how Skinny Cans changes that.',
+    title: t('bbs_title'),
+    description: t('bbs_desc'),
     alternates: {
       canonical: `${baseUrl}/${locale}/bbs`,
       languages: {
@@ -31,9 +31,8 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      title: 'The Science of Smarter Drinking | Skinny Cans',
-      description:
-        'Peer-reviewed studies on alcohol, sugar metabolic load, and liver health.',
+      title: `${t('bbs_title')} | Skinny Cans`,
+      description: t('bbs_desc'),
       url: `${baseUrl}/${locale}/bbs`,
     },
   }

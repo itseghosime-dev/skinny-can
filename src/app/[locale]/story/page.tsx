@@ -1,6 +1,6 @@
 import Stories from '@/components/Stories'
 import StoryBanner from '@/components/StoryBanner'
-import { unstable_setRequestLocale } from 'next-intl/server'
+import { getTranslations, unstable_setRequestLocale } from 'next-intl/server'
 import { Metadata } from 'next'
 import React from 'react'
 import StoryBg from '@/assets/skinny-story.webp'
@@ -14,12 +14,12 @@ interface PageProps {
 export async function generateMetadata({
   params: { locale },
 }: PageProps): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'Metadata' })
   const baseUrl = env.NEXT_PUBLIC_SITE_URL
 
   return {
-    title: 'The Skinny Story — Brewed by Hand, Built for Health',
-    description:
-      'Learn the origin of Skinny Cans. How an army veteran turned fitness enthusiast rebelled against sugar-laden alcohol by brewing clean cocktails by hand.',
+    title: t('story_title'),
+    description: t('story_desc'),
     alternates: {
       canonical: `${baseUrl}/${locale}/story`,
       languages: {
@@ -29,9 +29,8 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      title: 'The Skinny Story | Skinny Cans',
-      description:
-        'Brewed by hand. Born out of frustration. Built for freedom.',
+      title: `${t('story_title')} | Skinny Cans`,
+      description: t('story_desc'),
       url: `${baseUrl}/${locale}/story`,
     },
   }
