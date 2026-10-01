@@ -4,17 +4,19 @@ import Image from 'next/image'
 import OverviewFlower from '@/assets/overview_background.png'
 import { Icons } from './icons'
 import ProductCarousel from './ProductCarousel'
+import { Link } from '@/i18n/routing'
 
 export default function ProductOverview() {
   const t = useTranslations('Index')
   const benefits = t.raw('product_overview_benefits') as string[]
+
   return (
-    <div className="relative">
+    <section className="relative" aria-label="Product Overview">
       <Image
         src={OverviewFlower}
-        alt="Flower"
+        alt="Decorative background illustration"
         sizes="100%"
-        className="absolute left-0 top-0 z-0 "
+        className="pointer-events-none absolute left-0 top-0 z-0"
       />
       <div className="container relative z-10 pt-20 md:pt-28">
         <div className="mx-auto max-w-4xl space-y-12">
@@ -33,21 +35,24 @@ export default function ProductOverview() {
                   {benefits.map((benefit, index) => (
                     <li
                       key={index}
-                      className=" font-varela text-lg text-[#96A69C] md:text-xl"
+                      className="font-varela text-lg text-[#96A69C] md:text-xl"
                     >
                       {benefit}
                     </li>
                   ))}
                 </ul>
-                <button className="flex items-center justify-center gap-2 bg-primary px-8 py-3 text-sm uppercase tracking-wider text-white transition-colors duration-300 hover:bg-[#96A69C] lg:text-base">
+                <Link
+                  href="/product"
+                  className="inline-flex items-center justify-center gap-2 bg-primary px-8 py-3 font-varela text-sm uppercase tracking-wider text-white transition-colors duration-300 hover:bg-[#96A69C] lg:text-base"
+                >
                   {t('product_overview_call_to_action')}{' '}
                   <Icons.rightArrow className="h-5 w-5" />
-                </button>
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

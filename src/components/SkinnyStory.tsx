@@ -4,16 +4,19 @@ import React from 'react'
 import StoryBg from '@/assets/skinny-story.webp'
 import { useTranslations } from 'next-intl'
 import { Icons } from './icons'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 
 export default function SkinnyStory() {
   const t = useTranslations('Index')
 
   return (
-    <div className="relative flex items-center justify-center py-36 lg:py-64">
+    <section
+      className="relative flex items-center justify-center py-36 lg:py-64"
+      aria-label="Brand Story Highlight"
+    >
       <Image
         src={StoryBg}
-        alt="Background Image"
+        alt="Skinny Story background imagery"
         fill
         sizes="100%"
         className="absolute z-0 h-full w-full object-cover object-center"
@@ -27,12 +30,12 @@ export default function SkinnyStory() {
           {t('skinny_story')}
         </h2>
         <Link
-          href={'/story'}
-          className="flex items-center justify-center gap-2 bg-white px-8 py-3 text-sm uppercase tracking-wider text-primary transition-colors duration-300 hover:bg-primary hover:text-white"
+          href="/story"
+          className="inline-flex items-center justify-center gap-2 bg-white px-8 py-3 font-varela text-sm uppercase tracking-wider text-primary transition-colors duration-300 hover:bg-primary hover:text-white"
         >
           {t('full_story')} <Icons.rightArrow className="h-5 w-5" />
         </Link>
       </div>
-    </div>
+    </section>
   )
 }

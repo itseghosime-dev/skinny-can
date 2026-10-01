@@ -3,8 +3,12 @@
 import React, { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Pagination } from 'swiper/modules'
-import Image from 'next/image'
+import Image, { StaticImageData } from 'next/image'
 import CarouselContent, { CarouselItem } from './CarouselContent'
+
+import SlideBgOne from '@/assets/slider-bg-one.svg'
+import SlideBgTwo from '@/assets/slider-bg-two.webp'
+import SlideBgThree from '@/assets/slider-bg-three.webp'
 
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -12,19 +16,19 @@ import { SiteConfig } from '@/config/site-i18n'
 
 const sliderImages: CarouselItem[] = [
   {
-    src: require('@/assets/slider-bg-one.svg'),
+    src: SlideBgOne,
     heading: 'brewed',
     description: 'banner_description',
     btn: 'button_banner',
   },
   {
-    src: require('@/assets/slider-bg-two.png'),
+    src: SlideBgTwo,
     heading: 'backed',
     description: 'banner_description',
     btn: 'button_banner',
   },
   {
-    src: require('@/assets/slider-bg-three.png'),
+    src: SlideBgThree,
     heading: 'built',
     description: 'banner_description',
     btn: 'button_banner',
@@ -53,9 +57,8 @@ export default function Slider({ setActiveBg, translation }: SliderProps) {
         setActiveBg(realIndex)
         setCurrentIndex(realIndex)
       }}
-      grabCursor={false}
-      allowTouchMove={false}
-      simulateTouch={false}
+      grabCursor={true}
+      allowTouchMove={true}
       pagination={{ clickable: true, el: '.custom-pagination' }}
       modules={[Autoplay, Pagination]}
       className="mySwiper relative"
@@ -65,11 +68,11 @@ export default function Slider({ setActiveBg, translation }: SliderProps) {
           <div className="relative h-80 overflow-hidden from-black/50 after:absolute after:inset-y-0 after:left-0 after:z-0 after:w-1/2 after:bg-gradient-to-r after:content-[''] md:h-full">
             <Image
               src={cont.src}
-              alt={`Slide ${i}`}
-              sizes="100%"
+              alt={`Skinny Cans feature slide ${i + 1}`}
+              sizes="(max-width: 768px) 270px, 600px"
               className="h-full w-full object-cover object-right"
+              priority={i === 0}
             />
-            {/* 👇 Force re-render of CarouselContent on slide change */}
             {i === currentIndex && (
               <CarouselContent
                 key={`content-${currentIndex}`}

@@ -1,6 +1,5 @@
 import { useTranslations } from 'next-intl'
-import BGImage from '@/assets/science_research_img.png'
-import BGImage1 from '@/assets/need-happen.png'
+import BGImage1 from '@/assets/need-happen.webp'
 import Image from 'next/image'
 import React from 'react'
 
@@ -12,7 +11,6 @@ export default function ScienceResearch() {
       heading: 'research_shows_heading',
       paragrahInfo: 'research_shows_paragraph',
     },
-
     {
       heading: 'sugar_heading',
       paragrahInfo: 'sugar_paragraph',
@@ -28,13 +26,16 @@ export default function ScienceResearch() {
   ]
 
   return (
-    <div className="relative ">
-      <section className="container  relative pb-10">
+    <div className="relative">
+      <section
+        className="container relative pb-10"
+        aria-label="Research and Findings"
+      >
         <Image
           src={BGImage1}
-          alt="BG"
+          alt="Decorative illustration background"
           sizes="100%"
-          className="absolute -bottom-1/4 z-0 h-full w-full max-w-2xl object-contain object-bottom"
+          className="pointer-events-none absolute -bottom-1/4 z-0 h-full w-full max-w-2xl object-contain object-bottom"
         />
 
         <div className="relative z-10 mx-auto grid w-fit max-w-6xl justify-center gap-16 pt-24 md:grid-cols-2 lg:gap-y-16 xl:gap-x-32">
@@ -46,7 +47,7 @@ export default function ScienceResearch() {
                 {t(items.heading)}
               </h3>
               <p
-                className={`font-amiri ${index === 0 ? 'capitalize text-primary md:text-base lg:text-lg xl:text-xl' : 'text-[#5F5F5F] md:text-base lg:text-lg'} max-w-[450px] font-varela text-sm `}
+                className={`font-amiri ${index === 0 ? 'capitalize text-primary md:text-base lg:text-lg xl:text-xl' : 'text-[#5F5F5F] md:text-base lg:text-lg'} max-w-[450px] font-varela text-sm`}
               >
                 {t(items.paragrahInfo)
                   .split('\n')
@@ -61,9 +62,7 @@ export default function ScienceResearch() {
                 <p className="max-w-[480px] font-amiri text-sm font-bold text-primary md:text-base lg:text-lg">
                   {t('sugar_paired')}
                 </p>
-              ) : (
-                ''
-              )}
+              ) : null}
             </div>
           ))}
           <div />

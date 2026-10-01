@@ -1,70 +1,89 @@
-import { useTranslations } from 'next-intl'
 import React from 'react'
-import SodaOne from '@/assets/skinny-can-one.png'
-import SodaTwo from '@/assets/skinny-can-two.png'
 import Image from 'next/image'
+import { notFound } from 'next/navigation'
+import { getTranslations, unstable_setRequestLocale } from 'next-intl/server'
+
 import { Icons } from '@/components/icons'
 import BgOneSlug from '@/assets/product_slug_background.png'
-import ProductSubImage from '@/assets/skinny-crisp.png'
-import ProductSubImage1 from '@/assets/skinny-juicy.png'
+import { Link } from '@/i18n/routing'
+import { Locale, locales } from '@/i18n/request'
+import { getProductBySlug, PRODUCTS } from '@/features/products/data/products'
 
 interface PageProps {
-  params: { slug: string }
+  params: {
+    locale: Locale
+    slug: string
+  }
 }
 
-export default function Page({ params }: PageProps) {
-  const { slug } = params
-  const t = useTranslations('Index')
-  const productHighlights = t.raw(`${slug}_product_highlights`) as string[]
+export function generateStaticParams() {
+  const params: { locale: Locale; slug: string }[] = []
+  for (const locale of locales) {
+    for (const product of PRODUCTS) {
+      params.push({ locale, slug: product.slug })
+    }
+  }
+  return params
+}
+
+export default async function ProductDetailPage({
+  params: { locale, slug },
+}: PageProps) {
+  unstable_setRequestLocale(locale)
+  const product = getProductBySlug(slug)
+
+  if (!product) {
+    notFound()
+  }
+
+  const t = await getTranslations({ locale, namespace: 'Index' })
+  const productHighlights = (t.raw(product.highlightsKey) as string[]) || []
 
   return (
     <main className="mx-auto mt-20 w-screen overflow-hidden lg:mt-40">
       <div className="relative pb-32 pt-20">
         <Image
           src={BgOneSlug}
-          alt="Background"
+          alt="Background decorative pattern"
           sizes="100%"
-          className="absolute bottom-0 left-0"
+          className="pointer-events-none absolute bottom-0 left-0"
         />
         <div className="container relative z-10 space-y-28">
-          <section className="space-y-5 text-center font-varela uppercase tracking-wider text-primary md:space-y-9 ">
+          <section className="space-y-5 text-center font-varela uppercase tracking-wider text-primary md:space-y-9">
             <div className="relative after:absolute after:-bottom-1 after:left-1/2 after:h-0.5 after:w-7 after:-translate-x-1/2 after:rounded-full after:bg-primary">
               <p className="text-sm lg:text-base">{t('collection')}</p>
             </div>
             <h1 className="font-amiri text-3xl md:text-5xl lg:text-7xl">
-              {t(`${slug}_product`)}
+              {t(product.nameKey)}
             </h1>
           </section>
           <section className="relative">
             <div className="relative z-10 mx-auto grid max-w-5xl items-center justify-center gap-7 lg:grid-cols-5">
               <div className="flex h-full items-center justify-center lg:col-span-2">
                 <Image
-                  src={slug === 'hard_lemonade' ? SodaOne : SodaTwo}
-                  alt={t(`${slug}_product`)}
-                  sizes="100%"
-                  className="mx-auto h-full max-h-[750px] min-h-52 w-auto "
+                  src={product.image}
+                  alt={t(product.nameKey)}
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                  className="mx-auto h-full max-h-[750px] min-h-52 w-auto object-contain"
+                  priority
                 />
               </div>
               <div className="relative space-y-7 py-4 lg:col-span-3">
-                <div className="absolute bottom-0 right-0 z-0 h-auto w-32 md:w-52 lg:w-60">
+                <div className="pointer-events-none absolute bottom-0 right-0 z-0 h-auto w-32 md:w-52 lg:w-60">
                   <Image
-                    src={
-                      slug === 'hard_lemonade'
-                        ? ProductSubImage
-                        : ProductSubImage1
-                    }
-                    alt={t(`${slug}_product`)}
-                    sizes="100%"
+                    src={product.subImage}
+                    alt={`${t(product.nameKey)} fruit ingredients`}
+                    sizes="(max-width: 768px) 120px, 240px"
                   />
                 </div>
-                <h3 className="font-amiri text-2xl text-primary md:text-3xl lg:text-4xl xl:text-5xl">
-                  {t(`${slug}_product_intro_title`)}
-                </h3>
+                <h2 className="font-amiri text-2xl text-primary md:text-3xl lg:text-4xl xl:text-5xl">
+                  {t(product.titleKey)}
+                </h2>
                 <p className="text-base text-[#96A69C] md:text-lg">
-                  {t(`${slug}_product_intro_description`)}
+                  {t(product.introDescKey)}
                 </p>
                 <p className="text-base text-[#96A69C] md:text-lg">
-                  {t(`${slug}_product_intro_blend`)
+                  {t(product.introBlendKey)
                     .split('\n')
                     .map((line, idx, arr) => (
                       <React.Fragment key={idx}>
@@ -77,7 +96,7 @@ export default function Page({ params }: PageProps) {
                 <ul className="list-disc space-y-1 py-3 pl-4">
                   {productHighlights.map((item, idx) => (
                     <li
-                      className="text-base text-primary md:text-lg lg:text-xl"
+                      className="font-varela text-base text-primary md:text-lg lg:text-xl"
                       key={idx}
                     >
                       {item}
@@ -85,10 +104,13 @@ export default function Page({ params }: PageProps) {
                   ))}
                 </ul>
 
-                <button className="flex items-center justify-center gap-2 bg-primary px-8 py-3 text-xs uppercase tracking-wider text-white transition-colors duration-300 hover:bg-[#96A69C] md:text-sm lg:text-base">
+                <Link
+                  href="/partner"
+                  className="inline-flex items-center justify-center gap-2 bg-primary px-8 py-3 font-varela text-xs uppercase tracking-wider text-white transition-colors duration-300 hover:bg-[#96A69C] md:text-sm lg:text-base"
+                >
                   {t(`${slug}_find_reseller`)}{' '}
                   <Icons.rightArrow className="h-5 w-5" />
-                </button>
+                </Link>
               </div>
             </div>
           </section>

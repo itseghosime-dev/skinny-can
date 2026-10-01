@@ -2,7 +2,8 @@ import React from 'react'
 import { SiteConfig } from '@/config/site-i18n'
 import { Icons } from './icons'
 import { motion, AnimatePresence } from 'framer-motion'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
+import type { StaticImageData } from 'next/image'
 
 type SiteConfigKey = keyof Pick<
   SiteConfig,
@@ -10,7 +11,7 @@ type SiteConfigKey = keyof Pick<
 >
 
 export type CarouselItem = {
-  src: any
+  src: StaticImageData
   heading: SiteConfigKey
   description: SiteConfigKey
   btn: SiteConfigKey
@@ -67,7 +68,7 @@ export default function CarouselContent({
         >
           <Link
             href="/story"
-            className="flex items-center justify-center gap-2 bg-[#F1F1F1] px-4 py-3 text-xs uppercase tracking-wider text-primary transition-colors duration-300 hover:bg-primary hover:text-white md:px-8 lg:text-base xl:text-lg"
+            className="flex items-center justify-center gap-2 bg-[#F1F1F1] px-4 py-3 font-varela text-xs uppercase tracking-wider text-primary transition-colors duration-300 hover:bg-primary hover:text-white md:px-8 lg:text-base xl:text-lg"
           >
             {translation[cont.btn]} <Icons.rightArrow className="h-5 w-5" />
           </Link>

@@ -2,25 +2,26 @@ import { useTranslations } from 'next-intl'
 import React from 'react'
 import { Icons } from './icons'
 
-import WaitlistBg from '@/assets/waitlist_bg.png'
+import WaitlistBg from '@/assets/waitlist_bg.webp'
 import Image from 'next/image'
 import WaitlistFlower from '@/assets/waitlist-flower.svg'
+import { Link } from '@/i18n/routing'
 
 export default function Waitlist() {
   const t = useTranslations('Index')
 
   return (
-    <div className="relative pb-32">
+    <section className="relative pb-32" aria-label="Join Partner Waiting List">
       <div className="container relative z-10">
-        <div className="relative">
+        <div className="relative overflow-hidden">
           <Image
-            alt="Beer Pump"
+            alt="Skinny Cans beverage tap background"
             src={WaitlistBg}
             sizes="100%"
             fill
             className="absolute z-0 h-full w-full object-cover object-center"
           />
-          <section className="relative z-10 bg-gradient-to-r from-black/75 to-black/30 to-70% px-5 py-14 text-left font-varela text-white md:px-14 md:py-20 lg:to-black/0 lg:to-70%">
+          <div className="relative z-10 bg-gradient-to-r from-black/75 to-black/30 to-70% px-5 py-14 text-left font-varela text-white md:px-14 md:py-20 lg:to-black/0 lg:to-70%">
             <div className="space-y-5 tracking-wider md:space-y-6 lg:space-y-8">
               <div className="relative w-fit max-w-72 after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-7 after:rounded-full after:bg-white">
                 <p className="font-varela text-xs uppercase md:text-sm">
@@ -34,20 +35,23 @@ export default function Waitlist() {
                 {t('waitlist_description')}
               </p>
               <div className="md:pt-5">
-                <button className="flex items-center justify-center gap-2 bg-[#F1F1F1] px-8 py-3 text-sm uppercase tracking-wider text-primary transition-colors duration-300 hover:bg-primary hover:text-white lg:text-base">
+                <Link
+                  href="/waitlist"
+                  className="inline-flex items-center justify-center gap-2 bg-[#F1F1F1] px-8 py-3 font-varela text-sm uppercase tracking-wider text-primary transition-colors duration-300 hover:bg-primary hover:text-white lg:text-base"
+                >
                   {t('join_waitlist')} <Icons.rightArrow className="h-5 w-5" />
-                </button>
+                </Link>
               </div>
             </div>
-          </section>
+          </div>
         </div>
       </div>
       <Image
         src={WaitlistFlower}
-        alt="FLower"
+        alt="Decorative flower illustration"
         sizes="100%"
-        className="absolute -bottom-1/2 z-0 h-auto w-64 -translate-y-1/3 md:w-72"
+        className="pointer-events-none absolute -bottom-1/2 z-0 h-auto w-64 -translate-y-1/3 md:w-72"
       />
-    </div>
+    </section>
   )
 }

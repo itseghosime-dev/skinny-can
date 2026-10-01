@@ -1,18 +1,19 @@
 import Image from 'next/image'
 import React from 'react'
-
-import StoryBg from '@/assets/alcohol_background.png'
+import StoryBg from '@/assets/alcohol_background.webp'
 import { useTranslations } from 'next-intl'
-import { Icons } from './icons'
 
 export default function AlcoholBackground() {
   const t = useTranslations('Index')
 
   return (
-    <div className="relative flex items-center justify-center py-36 lg:py-64">
+    <section
+      className="relative flex items-center justify-center py-36 lg:py-64"
+      aria-label="Brand Mission"
+    >
       <Image
         src={StoryBg}
-        alt="Background Image"
+        alt="Skinny Cans brand mission backdrop"
         fill
         sizes="100%"
         className="absolute z-0 h-full w-full object-cover object-center"
@@ -27,6 +28,6 @@ export default function AlcoholBackground() {
           {t('mission_heading')}
         </h2>
       </div>
-    </div>
+    </section>
   )
 }

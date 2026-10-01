@@ -1,15 +1,13 @@
 import StoryBanner from '@/components/StoryBanner'
 import { unstable_setRequestLocale } from 'next-intl/server'
 import React from 'react'
-import BBSBg from '@/assets/bbs.png'
+import BBSBg from '@/assets/bbs.webp'
 import ScienceResearch from '@/components/ScienceResearch'
 import NewNeed from '@/components/NewNeed'
 import ScientificBacking from '@/components/ScientificBacking'
-import BBSBanner from '@/components/BBSBanner'
-
 import { Locale } from '@/i18n/request'
 
-export default function Page({
+export default function SciencePage({
   params: { locale },
 }: {
   params: { locale: Locale }
@@ -20,7 +18,6 @@ export default function Page({
     <main className="w-screen overflow-x-hidden">
       <StoryBanner page="bbs" img={BBSBg} />
       <ScientificBacking />
-      {/* <BBSBanner /> */}
       <ScienceResearch />
       <NewNeed />
     </main>

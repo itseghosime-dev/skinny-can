@@ -1,15 +1,15 @@
 import { useTranslations } from 'next-intl'
 import React from 'react'
 
-import SodaOne from '@/assets/skinny-can-one.png'
-import SodaTwo from '@/assets/skinny-can-two.png'
+import SodaOne from '@/assets/skinny-can-one.webp'
+import SodaTwo from '@/assets/skinny-can-two.webp'
 
 import BgOne from '@/assets/selection-bg-one.png'
 import BgTwo from '@/assets/selection-bg-two.png'
 
 import Image from 'next/image'
 import { Icons } from './icons'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 
 export default function Collections() {
   const t = useTranslations('Index')
@@ -52,16 +52,16 @@ export default function Collections() {
               >
                 <Image
                   src={items.can}
-                  alt={t(items.title)}
-                  sizes="100%"
-                  className="transistion-transform h-52 w-auto duration-200 ease-in group-hover:scale-105 md:h-60 lg:h-80"
+                  alt={`Skinny Cans ${t(items.title)}`}
+                  sizes="(max-width: 768px) 208px, (max-width: 1024px) 240px, 320px"
+                  className="h-52 w-auto object-contain transition-transform duration-200 ease-in group-hover:scale-105 md:h-60 lg:h-80"
                 />
-                <h4 className="text-xl md:text-2xl lg:text-3xl">
+                <h2 className="font-varela text-xl md:text-2xl lg:text-3xl">
                   {t(items.title)}
-                </h4>
+                </h2>
                 <Link
                   href={`/product/${items.hash}`}
-                  className="flex items-center justify-center gap-2 bg-[#F1F1F1] px-8 py-3 text-xs uppercase tracking-wider transition-colors duration-300 hover:bg-[#96A69C] md:text-sm lg:text-base"
+                  className="flex items-center justify-center gap-2 bg-[#F1F1F1] px-8 py-3 font-varela text-xs uppercase tracking-wider transition-colors duration-300 hover:bg-[#96A69C] hover:text-white md:text-sm lg:text-base"
                 >
                   {t('discover')} <Icons.rightArrow className="h-5 w-5" />
                 </Link>
@@ -72,16 +72,16 @@ export default function Collections() {
       </div>
 
       {/* Backgrounds */}
-      <div className="absolute inset-0 top-0 z-0">
+      <div className="pointer-events-none absolute inset-0 top-0 z-0">
         <Image
           src={BgOne}
-          alt="Background"
+          alt="Decorative background accent"
           sizes="100%"
           className="absolute right-0 top-0"
         />
         <Image
           src={BgTwo}
-          alt="Background"
+          alt="Decorative background accent"
           sizes="100%"
           className="absolute bottom-14 left-0 md:translate-y-16"
         />
