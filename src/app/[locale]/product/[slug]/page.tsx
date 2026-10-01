@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server'
 
@@ -8,6 +9,7 @@ import BgOneSlug from '@/assets/product_slug_background.png'
 import { Link } from '@/i18n/routing'
 import { Locale, locales } from '@/i18n/request'
 import { getProductBySlug, PRODUCTS } from '@/features/products/data/products'
+import { env } from '@/config/env'
 
 interface PageProps {
   params: {
@@ -26,6 +28,37 @@ export function generateStaticParams() {
   return params
 }
 
+export async function generateMetadata({
+  params: { locale, slug },
+}: PageProps): Promise<Metadata> {
+  const product = getProductBySlug(slug)
+  if (!product) return {}
+
+  const t = await getTranslations({ locale, namespace: 'Index' })
+  const productName = t(product.nameKey)
+  const productDescription = t(product.introDescKey)
+  const baseUrl = env.NEXT_PUBLIC_SITE_URL
+
+  return {
+    title: `${productName} — Organic Sugar-Free RTD Cocktail`,
+    description: productDescription,
+    alternates: {
+      canonical: `${baseUrl}/${locale}/product/${slug}`,
+      languages: {
+        en: `${baseUrl}/en/product/${slug}`,
+        no: `${baseUrl}/no/product/${slug}`,
+        se: `${baseUrl}/se/product/${slug}`,
+      },
+    },
+    openGraph: {
+      title: `${productName} | Skinny Cans`,
+      description: productDescription,
+      url: `${baseUrl}/${locale}/product/${slug}`,
+      type: 'website',
+    },
+  }
+}
+
 export default async function ProductDetailPage({
   params: { locale, slug },
 }: PageProps) {
@@ -38,9 +71,48 @@ export default async function ProductDetailPage({
 
   const t = await getTranslations({ locale, namespace: 'Index' })
   const productHighlights = (t.raw(product.highlightsKey) as string[]) || []
+  const baseUrl = env.NEXT_PUBLIC_SITE_URL
+
+  const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: t(product.nameKey),
+    description: t(product.introDescKey),
+    category: 'Alcoholic Beverage > Ready to Drink Cocktail',
+    brand: {
+      '@type': 'Brand',
+      name: 'Skinny Cans',
+    },
+    offers: {
+      '@type': 'Offer',
+      availability: 'https://schema.org/InStock',
+      url: `${baseUrl}/${locale}/product/${slug}`,
+    },
+    additionalProperty: [
+      {
+        '@type': 'PropertyValue',
+        name: 'Alcohol by Volume',
+        value: product.abv,
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'Calories per can',
+        value: product.calories,
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'Sugar content',
+        value: product.sugar,
+      },
+    ],
+  }
 
   return (
     <main className="mx-auto mt-20 w-screen overflow-hidden lg:mt-40">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
       <div className="relative pb-32 pt-20">
         <Image
           src={BgOneSlug}

@@ -2,16 +2,43 @@ import React from 'react'
 import Invite from '@/assets/waitlist_bg.webp'
 import BackingBg from '@/assets/backings_bg.svg'
 import { unstable_setRequestLocale } from 'next-intl/server'
+import { Metadata } from 'next'
 import Image from 'next/image'
 import StoryBanner from '@/components/StoryBanner'
 import PartnersInfo from '@/components/PartnersInfo'
 import { Locale } from '@/i18n/request'
+import { env } from '@/config/env'
 
-export default function PartnerPage({
-  params: { locale },
-}: {
+interface PageProps {
   params: { locale: Locale }
-}) {
+}
+
+export async function generateMetadata({
+  params: { locale },
+}: PageProps): Promise<Metadata> {
+  const baseUrl = env.NEXT_PUBLIC_SITE_URL
+
+  return {
+    title: 'Partner with Skinny Cans — Distribution, Retail & Supply Chain',
+    description:
+      'Join our mission to revolutionize the RTD alcohol market. Strategic distribution partnerships, warehouse logistics, and global expansion details.',
+    alternates: {
+      canonical: `${baseUrl}/${locale}/partner`,
+      languages: {
+        en: `${baseUrl}/en/partner`,
+        no: `${baseUrl}/no/partner`,
+        se: `${baseUrl}/se/partner`,
+      },
+    },
+    openGraph: {
+      title: 'Partner with Skinny Cans',
+      description: 'Scaled production and strategic logistics partnerships.',
+      url: `${baseUrl}/${locale}/partner`,
+    },
+  }
+}
+
+export default function PartnerPage({ params: { locale } }: PageProps) {
   unstable_setRequestLocale(locale)
 
   return (
