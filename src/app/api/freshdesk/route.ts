@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
+import { checkRateLimit } from '@/lib/rate-limiter'
 
 const serverInquirySchema = z.object({
   email: z.string().email().max(255),
@@ -18,6 +19,21 @@ const ALLOWED_MIME_TYPES = [
 
 export async function POST(req: NextRequest) {
   try {
+    const ip =
+      req.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+      req.headers.get('x-real-ip') ||
+      '127.0.0.1'
+
+    if (!checkRateLimit(ip)) {
+      return NextResponse.json(
+        {
+          error:
+            'Too many requests. Please wait a minute before submitting again.',
+        },
+        { status: 429, headers: { 'Retry-After': '60' } },
+      )
+    }
+
     const formData = await req.formData()
 
     const rawEmail = formData.get('email')?.toString() || ''
@@ -56,18 +72,32 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    const isProduction = process.env.NODE_ENV === 'production'
     const FRESHDESK_DOMAIN = process.env.FRESHDESK_DOMAIN
     const FRESHDESK_API_KEY = process.env.FRESHDESK_API_KEY
 
-    // If Freshdesk is not configured in local development, simulate successful receipt
+    // In production, missing credentials is an unconfigured service failure (503), NEVER a mock success
     if (!FRESHDESK_DOMAIN || !FRESHDESK_API_KEY) {
+      if (isProduction) {
+        console.error(
+          '❌ Production error: Freshdesk credentials not configured in environment.',
+        )
+        return NextResponse.json(
+          {
+            error:
+              'Inquiry service is temporarily unavailable due to server configuration. Please try again later.',
+          },
+          { status: 503 },
+        )
+      }
+
       console.warn(
-        '⚠️ Freshdesk credentials not configured. Simulating successful mock submission.',
+        '⚠️ Development mode: Freshdesk credentials not configured. Returning local mock response.',
       )
       return NextResponse.json({
         success: true,
         mock: true,
-        message: 'Inquiry received successfully (mock mode)',
+        message: 'Inquiry received successfully (development mock mode)',
       })
     }
 
@@ -105,7 +135,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true }, { status: 200 })
   } catch (err) {
     console.error('Unhandled server error in inquiry route:', err)
     return NextResponse.json(
