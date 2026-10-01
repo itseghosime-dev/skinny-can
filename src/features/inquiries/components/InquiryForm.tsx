@@ -43,7 +43,7 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
     defaultValues: {
       email: '',
       description: '',
-      topic: '',
+      topic: 'Partner Inquiry',
       attachment: undefined,
     },
   })
@@ -229,6 +229,7 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
 
                         <input
                           type="file"
+                          data-testid="file-input"
                           accept=".jpg,.jpeg,.png,.webp,.pdf,image/jpeg,image/png,image/webp,application/pdf"
                           className="hidden"
                           ref={(el) => {

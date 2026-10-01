@@ -44,6 +44,17 @@ export async function generateMetadata({
       template: `%s | ${siteConfig.name}`,
     },
     description: siteConfig.description,
+    robots: {
+      index: locale === 'en',
+      follow: true,
+      googleBot: {
+        index: locale === 'en',
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
     alternates: {
       canonical: `${baseUrl}/${locale}`,
       languages: {
@@ -59,11 +70,20 @@ export async function generateMetadata({
       siteName: siteConfig.name,
       title: `${siteConfig.name} — Clean, Conscious & Crafted Alcohol`,
       description: siteConfig.description,
+      images: [
+        {
+          url: `${baseUrl}/android-chrome-512x512.png`,
+          width: 512,
+          height: 512,
+          alt: siteConfig.name,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: `${siteConfig.name} — Clean, Conscious & Crafted Alcohol`,
       description: siteConfig.description,
+      images: [`${baseUrl}/android-chrome-512x512.png`],
     },
     icons: {
       icon: '/favicon.ico',
