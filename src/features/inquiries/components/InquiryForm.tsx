@@ -29,7 +29,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Icons } from '@/components/icons'
 import { SiteConfig } from '@/config/site-i18n'
 import {
-  inquiryClientSchema,
+  createInquiryClientSchema,
   InquiryFormValues,
   INQUIRY_TOPICS,
 } from '@/features/inquiries/schemas/inquiry.schema'
@@ -40,8 +40,10 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
   const [fileName, setFileName] = useState<string>('')
   const [loading, setLoading] = useState(false)
 
+  const clientSchema = React.useMemo(() => createInquiryClientSchema(t), [t])
+
   const form = useForm<InquiryFormValues>({
-    resolver: zodResolver(inquiryClientSchema),
+    resolver: zodResolver(clientSchema),
     defaultValues: {
       email: '',
       description: '',
@@ -69,7 +71,15 @@ export default function InquiryForm({ config }: { config?: SiteConfig }) {
       const data = await res.json()
 
       if (!res.ok) {
-        toast.error(data.error || t('toast_error_default'))
+        if (res.status === 429) {
+          toast.error(t('toast_rate_limit'))
+        } else if (res.status === 503) {
+          toast.error(t('toast_service_unavailable'))
+        } else if (res.status === 502) {
+          toast.error(t('toast_upstream_error'))
+        } else {
+          toast.error(data.error || t('toast_error_default'))
+        }
       } else {
         toast.success(data.mock ? t('toast_mock') : t('toast_success'))
         form.reset()

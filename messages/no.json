@@ -185,11 +185,16 @@
     "toast_success": "Forespørselen din ble sendt inn! Teamet vårt vil kontakte deg snart.",
     "toast_mock": "Forespørsel mottatt! (Utviklingsmodus)",
     "toast_error_default": "Kunne ikke sende inn forespørselen din. Vennligst prøv igjen.",
+    "toast_rate_limit": "For mange forespørsler. Vennligst vent et minutt før du prøver igjen.",
+    "toast_service_unavailable": "Forespørselstjenesten er midlertidig utilgjengelig. Vennligst prøv igjen senere.",
+    "toast_upstream_error": "Støttetjenesten er midlertidig utilgjengelig. Vennligst prøv igjen senere.",
     "toast_network_error": "Nettverksfeil oppstod. Vennligst sjekk tilkoblingen din og prøv igjen.",
     "val_email_required": "E-postadresse er påkrevd",
     "val_email_invalid": "Vennligst skriv inn en gyldig e-postadresse",
     "val_topic_required": "Vennligst velg et tema",
-    "val_description_min": "Beskrivelsen må være på minst 5 tegn"
+    "val_description_min": "Beskrivelsen må være på minst 5 tegn",
+    "val_attachment_size": "Vedlegget kan ikke overskride 5 MB",
+    "val_attachment_type": "Kun .jpg, .jpeg, .png, .webp og .pdf filer aksepteres"
   },
   "Restrictions": {
     "welcome": "Velkommen!",

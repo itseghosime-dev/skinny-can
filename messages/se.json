@@ -185,11 +185,16 @@
     "toast_success": "Du jearaldat lea sáddejuvvon! Min joavku váldá oktavuođa fargga.",
     "toast_mock": "Jearaldat vuostáiváldojuvvon! (Ovddidandilli)",
     "toast_error_default": "Ii sáhttán sáddet jearaldaga. Geahččal fas.",
+    "toast_rate_limit": "Menddo ollu jearaldagat. Vuordde veaháš ovdal go geahččalat fas.",
+    "toast_service_unavailable": "Jearaldatbálvalus ii leat dál olámuttus. Geahččal fas maŋŋil.",
+    "toast_upstream_error": "Doarjjabálvalus ii leat dál olámuttus. Geahččal fas maŋŋil.",
     "toast_network_error": "Fierbmeváddu šattai. Dárkkis oktavuođa ja geahččal fas.",
     "val_email_required": "E-poastačujuhus gáibiduvvo",
     "val_email_invalid": "Čále dohkálaš e-poastačujuhusa",
     "val_topic_required": "Vállje fáttá",
-    "val_description_min": "Čilgehus ferte leat unnimusat 5 mearkka"
+    "val_description_min": "Čilgehus ferte leat unnimusat 5 mearkka",
+    "val_attachment_size": "Mielddus ii oaččo leat stuorát go 5 MB",
+    "val_attachment_type": "Dušše .jpg, .jpeg, .png, .webp ja .pdf fiillat dohkkehuvvojit"
   },
   "Restrictions": {
     "welcome": "Bures boahtin!",

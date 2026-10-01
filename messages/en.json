@@ -185,11 +185,16 @@
     "toast_success": "Your request was submitted successfully! Our team will get back to you shortly.",
     "toast_mock": "Inquiry received! (Development mock mode)",
     "toast_error_default": "Could not submit your inquiry. Please try again.",
+    "toast_rate_limit": "Too many requests. Please wait a minute before submitting again.",
+    "toast_service_unavailable": "Inquiry service is temporarily unavailable. Please try again later.",
+    "toast_upstream_error": "Support service is temporarily unavailable. Please try again later.",
     "toast_network_error": "Network error occurred. Please check your connection and try again.",
     "val_email_required": "Email address is required",
     "val_email_invalid": "Please enter a valid email address",
     "val_topic_required": "Please select a topic",
-    "val_description_min": "Description must be at least 5 characters"
+    "val_description_min": "Description must be at least 5 characters",
+    "val_attachment_size": "Attachment file size must be 5MB or less",
+    "val_attachment_type": "Only .jpg, .jpeg, .png, .webp and .pdf files are accepted"
   },
   "Restrictions": {
     "welcome": "Welcome!",
