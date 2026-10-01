@@ -10,13 +10,22 @@ async function runE2E() {
   const server = spawn('npx', ['next', 'start', '-p', PORT.toString()], {
     cwd: path.join(__dirname, '..'),
     stdio: 'pipe',
-    env: { ...process.env, NODE_ENV: 'test', FRESHDESK_DOMAIN: 'skinny', FRESHDESK_API_KEY: 'test_key' },
+    env: {
+      ...process.env,
+      NODE_ENV: 'test',
+      FRESHDESK_DOMAIN: 'skinny',
+      FRESHDESK_API_KEY: 'test_key',
+    },
   })
 
   // Wait for server ready
   await new Promise((resolve, reject) => {
     server.stdout.on('data', (d) => {
-      if (d.toString().includes('Ready in') || d.toString().includes('started server on') || d.toString().includes('localhost')) {
+      if (
+        d.toString().includes('Ready in') ||
+        d.toString().includes('started server on') ||
+        d.toString().includes('localhost')
+      ) {
         resolve()
       }
     })
@@ -41,7 +50,7 @@ async function runE2E() {
     console.log('\n--- Test 1: Real Browser Age-Gate Flow ---')
     await page.deleteCookie({ name: 'ageConfirmed', domain: 'localhost' })
     await page.goto(`${BASE_URL}/en`, { waitUntil: 'networkidle0' })
-    
+
     const modalVisible = await page.$('div[role="dialog"]')
     if (modalVisible) {
       console.log('✓ Verified: Age-Gate modal is rendered on first visit')
@@ -54,17 +63,19 @@ async function runE2E() {
     const yesButton = await page.$('button[type="button"]')
     const buttons = await page.$$('button')
     for (const b of buttons) {
-      const text = await page.evaluate(el => el.textContent, b)
+      const text = await page.evaluate((el) => el.textContent, b)
       if (text.includes('Yes, I’m over 21')) {
         await b.click()
         break
       }
     }
-    await new Promise(r => setTimeout(r, 600))
+    await new Promise((r) => setTimeout(r, 600))
     const cookies = await page.cookies()
-    const ageCookie = cookies.find(c => c.name === 'ageConfirmed')
+    const ageCookie = cookies.find((c) => c.name === 'ageConfirmed')
     if (ageCookie && ageCookie.value === 'true') {
-      console.log('✓ Verified: Cookie ageConfirmed=true set and modal dismissed')
+      console.log(
+        '✓ Verified: Cookie ageConfirmed=true set and modal dismissed',
+      )
       results.push({ name: 'Age-Gate Cookie Acceptance', status: 'PASS' })
     } else {
       results.push({ name: 'Age-Gate Cookie Acceptance', status: 'FAIL' })
@@ -72,7 +83,9 @@ async function runE2E() {
 
     // Test 2: Navigation & Dynamic Product Page
     console.log('\n--- Test 2: Product Route Navigation ---')
-    await page.goto(`${BASE_URL}/en/product/hard_lemonade`, { waitUntil: 'networkidle0' })
+    await page.goto(`${BASE_URL}/en/product/hard_lemonade`, {
+      waitUntil: 'networkidle0',
+    })
     const pageContent = await page.content()
     if (pageContent.includes('4%') && pageContent.includes('57 KCAL')) {
       console.log('✓ Verified: SSG Product detail page renders product specs')
@@ -83,7 +96,10 @@ async function runE2E() {
 
     // Test 3: 404 Guard on Invalid Product Slug
     console.log('\n--- Test 3: 404 Guard for Unknown Product ---')
-    const res404 = await page.goto(`${BASE_URL}/en/product/invalid-energy-drink`, { waitUntil: 'networkidle0' })
+    const res404 = await page.goto(
+      `${BASE_URL}/en/product/invalid-energy-drink`,
+      { waitUntil: 'networkidle0' },
+    )
     if (res404.status() === 404) {
       console.log('✓ Verified: Unknown product slug returns HTTP 404 Not Found')
       results.push({ name: 'Invalid Product 404 Guard', status: 'PASS' })
@@ -92,22 +108,26 @@ async function runE2E() {
     }
 
     // Test 4: Real Browser Form Submission & File Upload
-    console.log('\n--- Test 4: Inquiry Form Submission with Real File Upload ---')
+    console.log(
+      '\n--- Test 4: Inquiry Form Submission with Real File Upload ---',
+    )
     await page.goto(`${BASE_URL}/en/waitlist`, { waitUntil: 'networkidle0' })
-    
+
     // Type email
     const emailInput = await page.$('input[name="email"]')
     await emailInput.type('partner-e2e@beverages.no')
 
     // Type description
     const descInput = await page.$('textarea[name="description"]')
-    await descInput.type('Real browser test inquiry for European beverage distribution.')
+    await descInput.type(
+      'Real browser test inquiry for European beverage distribution.',
+    )
 
     // Upload attachment
     const fileInput = await page.$('input[data-testid="file-input"]')
     const uploadFilePath = path.join(__dirname, '../public/favicon-32x32.png')
     await fileInput.uploadFile(uploadFilePath)
-    await new Promise(r => setTimeout(r, 500))
+    await new Promise((r) => setTimeout(r, 500))
 
     const uploadedPill = await page.$('span')
     const pillText = await page.evaluate(() => document.body.textContent)
@@ -121,12 +141,11 @@ async function runE2E() {
     // Submit form
     const submitBtn = await page.$('button[type="submit"]')
     await submitBtn.click()
-    await new Promise(r => setTimeout(r, 1500))
+    await new Promise((r) => setTimeout(r, 1500))
 
     const afterSubmitText = await page.evaluate(() => document.body.textContent)
     console.log('✓ Verified: Real browser submitted form payload to API')
     results.push({ name: 'Real Browser Form Dispatch', status: 'PASS' })
-
   } finally {
     await browser.close()
     server.kill()
@@ -139,7 +158,7 @@ async function runE2E() {
     console.log(`[${r.status}] ${r.name}`)
   }
 
-  const allPassed = results.every(r => r.status === 'PASS')
+  const allPassed = results.every((r) => r.status === 'PASS')
   if (!allPassed) {
     process.exit(1)
   }
