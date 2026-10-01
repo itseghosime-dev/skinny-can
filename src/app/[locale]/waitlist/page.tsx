@@ -3,10 +3,12 @@ import { unstable_setRequestLocale } from 'next-intl/server'
 import { getSiteConfig } from '@/config/site-i18n'
 import WaitlistForm from '@/components/WaitlistForm'
 
+import { Locale } from '@/i18n/request'
+
 export default function Page({
   params: { locale },
 }: {
-  params: { locale: string }
+  params: { locale: Locale }
 }) {
   unstable_setRequestLocale(locale)
   const siteConfig = getSiteConfig(locale)

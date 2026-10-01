@@ -5,10 +5,12 @@ import { unstable_setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
 import StoryBanner from '@/components/StoryBanner'
 
+import { Locale } from '@/i18n/request'
+
 export default function PartnerPage({
   params: { locale },
 }: {
-  params: { locale: string }
+  params: { locale: Locale }
 }) {
   unstable_setRequestLocale(locale)
 

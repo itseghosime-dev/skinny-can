@@ -4,10 +4,12 @@ import { unstable_setRequestLocale } from 'next-intl/server'
 import React from 'react'
 import StoryBg from '@/assets/skinny-story.webp'
 
+import { Locale } from '@/i18n/request'
+
 export default function Page({
   params: { locale },
 }: {
-  params: { locale: string }
+  params: { locale: Locale }
 }) {
   unstable_setRequestLocale(locale)
 

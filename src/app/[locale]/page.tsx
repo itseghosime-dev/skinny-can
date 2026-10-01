@@ -10,10 +10,12 @@ import AlcoholBackground from '@/components/AlcoholBackground'
 import SmarterDrinking from '@/components/SmarterDrinking'
 import Counters from '@/components/Counters'
 
+import { Locale } from '@/i18n/request'
+
 export default function IndexPage({
   params: { locale },
 }: {
-  params: { locale: string }
+  params: { locale: Locale }
 }) {
   unstable_setRequestLocale(locale)
   const siteConfig = getSiteConfig(locale)

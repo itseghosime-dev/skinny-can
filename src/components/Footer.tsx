@@ -2,21 +2,20 @@
 import { getSiteConfig } from '@/config/site-i18n'
 import React from 'react'
 import LanguageSelector from './ui/LanguageSelector'
-import { Locale } from '@/i18n'
-import { BsInstagram, BsLinkedin, BsTwitterX } from 'react-icons/bs'
+import { Locale } from '@/i18n/request'
+import { BsInstagram, BsLinkedin } from 'react-icons/bs'
 import { FaFacebookF } from 'react-icons/fa'
-import { AiOutlineYoutube } from 'react-icons/ai'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 
-interface SiteHeaderProps {
+interface FooterProps {
   locale: Locale
 }
 
-export default function Footer({ locale }: SiteHeaderProps) {
+export default function Footer({ locale }: FooterProps) {
   const siteConfig = getSiteConfig(locale)
 
   return (
-    <footer className=" relative z-10 border-t border-[#E6E6E6] bg-white pt-14 md:py-14">
+    <footer className="relative z-10 border-t border-[#E6E6E6] bg-white pt-14 md:py-14">
       <div className="container">
         <div className="grid items-center justify-center gap-10 md:grid-cols-2 md:justify-between">
           <div className="text-center md:text-start">
@@ -25,7 +24,7 @@ export default function Footer({ locale }: SiteHeaderProps) {
                 <li key={index} className="shrink-0">
                   <Link
                     href={items.href}
-                    className="font-verala text-[15px] uppercase text-primary"
+                    className="font-varela text-[15px] uppercase text-primary transition-colors hover:text-[#96A69C]"
                   >
                     {items.title}
                   </Link>
@@ -38,27 +37,33 @@ export default function Footer({ locale }: SiteHeaderProps) {
               {siteConfig.follow}
             </p>
             <div className="flex items-center justify-center gap-4">
-              <Link
+              <a
                 href={siteConfig.links.linkedin}
                 className="text-xl text-[#6E6E6E] transition-colors duration-200 ease-out hover:text-primary"
                 target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit Skinny Cans on LinkedIn"
               >
                 <BsLinkedin />
-              </Link>
-              <Link
+              </a>
+              <a
                 href={siteConfig.links.instagram}
                 className="text-xl text-[#6E6E6E] transition-colors duration-200 ease-out hover:text-primary"
                 target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit Skinny Cans on Instagram"
               >
                 <BsInstagram />
-              </Link>
-              <Link
+              </a>
+              <a
                 href={siteConfig.links.facebook}
                 className="text-xl text-[#6E6E6E] transition-colors duration-200 ease-out hover:text-primary"
                 target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit Skinny Cans on Facebook"
               >
                 <FaFacebookF />
-              </Link>
+              </a>
             </div>
           </div>
         </div>
@@ -67,10 +72,7 @@ export default function Footer({ locale }: SiteHeaderProps) {
           <div className="flex flex-col items-center justify-between gap-5 md:flex-row">
             <div className="text-center font-varela text-sm text-[#96A69C] md:text-left md:text-base">
               <p className="uppercase">{siteConfig.footer.drink_responsibly}</p>
-              <p>
-                ©{new Date().getFullYear()} Skinny Cans.{' '}
-                {siteConfig.footer.rights}
-              </p>
+              <p>© 2026 Skinny Cans. {siteConfig.footer.rights}</p>
             </div>
             <LanguageSelector locale={locale} width={'w-fit'} />
           </div>

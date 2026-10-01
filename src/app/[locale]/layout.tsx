@@ -1,8 +1,8 @@
 import '@/styles/globals.css'
 import { Metadata } from 'next'
 import { Amiri, Varela_Round } from 'next/font/google'
-import { Locale, locales } from '@/i18n'
-import { unstable_setRequestLocale } from 'next-intl/server'
+import { Locale, locales } from '@/i18n/request'
+import { getMessages, unstable_setRequestLocale } from 'next-intl/server'
 
 import { getSiteConfig } from '@/config/site-i18n'
 import { cn } from '@/lib/utils'
@@ -58,15 +58,7 @@ export default async function RootLayout({
   params: { locale },
 }: PageProps) {
   unstable_setRequestLocale(locale)
-
-  let messages
-  try {
-    messages = (await import(`@/locales/${locale}.json`)).default
-  } catch (error) {
-    console.error(`Missing translation file for locale: ${locale}`)
-    messages = {} // fallback to empty messages or handle 404
-  }
-
+  const messages = await getMessages()
   const siteConfig = getSiteConfig(locale)
 
   return (

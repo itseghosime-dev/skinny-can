@@ -7,10 +7,12 @@ import NewNeed from '@/components/NewNeed'
 import ScientificBacking from '@/components/ScientificBacking'
 import BBSBanner from '@/components/BBSBanner'
 
+import { Locale } from '@/i18n/request'
+
 export default function Page({
   params: { locale },
 }: {
-  params: { locale: string }
+  params: { locale: Locale }
 }) {
   unstable_setRequestLocale(locale)
 

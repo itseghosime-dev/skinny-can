@@ -1,5 +1,4 @@
 'use client'
-import { useRouter, usePathname } from 'next/navigation'
 import React from 'react'
 import {
   Select,
@@ -8,7 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Locale, locales, languageNames } from '@/i18n'
+import { Locale, locales, languageNames } from '@/i18n/request'
+import { usePathname, useRouter } from '@/i18n/routing'
 
 interface LanguageToggleProps {
   locale: Locale
@@ -23,20 +23,14 @@ export default function LanguageSelector({
 }: LanguageToggleProps) {
   const router = useRouter()
   const pathname = usePathname()
-  const normalizedPath = pathname.replace(`/${locale}`, '') || '/'
+
   const switchLanguage = (newLocale: string) => {
     if (newLocale === locale) return
-
-    const segments = pathname.split('/')
-    segments[1] = newLocale // replaces locale segment
-    const newPath = segments.join('/')
-    router.push(newPath)
+    router.replace(pathname, { locale: newLocale as Locale })
   }
 
   const headerCo =
-    normalizedPath === '/story' ||
-    normalizedPath === '/bbs' ||
-    normalizedPath === '/partner'
+    pathname === '/story' || pathname === '/bbs' || pathname === '/partner'
 
   return (
     <div
@@ -44,18 +38,19 @@ export default function LanguageSelector({
     >
       <Select value={locale} defaultValue="en" onValueChange={switchLanguage}>
         <SelectTrigger
-          className={`border-0 ${width ? width : ''} uppercase shadow-none  focus-visible:border-0 focus-visible:ring-0 ${headerCo && !scroll ? 'text-white' : 'text-primary'} text-xs`}
+          aria-label="Select Language"
+          className={`border-0 ${width ? width : ''} uppercase shadow-none focus-visible:border-0 focus-visible:ring-0 ${headerCo && !scroll ? 'text-white' : 'text-primary'} text-xs`}
         >
           <SelectValue />
         </SelectTrigger>
         <SelectContent
-          className={`uppercase  ${width ? width : 'min-w-[16rem]'} shadow-xs rounded-none border-0`}
+          className={`uppercase ${width ? width : 'min-w-[16rem]'} shadow-xs rounded-none border-0`}
         >
           {locales.map((lang) => (
             <SelectItem
               key={lang}
               value={lang}
-              className={`rounded-none py-3 text-sm text-primary`}
+              className="cursor-pointer rounded-none py-3 text-sm text-primary"
             >
               {languageNames[lang]}
             </SelectItem>

@@ -1,15 +1,14 @@
 'use client'
-import Link from 'next/link'
 import Logo from '@/assets/Logo.webp'
 import { getSiteConfig } from '@/config/site-i18n'
 import { Icons } from '@/components/icons'
-import { Locale } from '@/i18n'
+import { Locale } from '@/i18n/request'
 import LanguageSelector from './ui/LanguageSelector'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { RiMenu4Fill } from 'react-icons/ri'
 import { IoClose } from 'react-icons/io5'
-import { usePathname } from 'next/navigation'
+import { Link, usePathname } from '@/i18n/routing'
 import clsx from 'clsx'
 
 interface SiteHeaderProps {
@@ -19,28 +18,18 @@ interface SiteHeaderProps {
 export function SiteHeader({ locale }: SiteHeaderProps) {
   const siteConfig = getSiteConfig(locale)
   const pathname = usePathname()
-  const normalizedPath = pathname.replace(`/${locale}`, '') || '/'
   const headerCo =
-    normalizedPath === '/story' ||
-    normalizedPath === '/bbs' ||
-    normalizedPath === '/partner'
-  const headerNo =
-    normalizedPath !== '/story' &&
-    normalizedPath !== '/bbs' &&
-    normalizedPath !== '/partner'
+    pathname === '/story' || pathname === '/bbs' || pathname === '/partner'
+  const headerNo = !headerCo
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setScrolled(true)
-      } else {
-        setScrolled(false)
-      }
+      setScrolled(window.scrollY > 10)
     }
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -48,10 +37,10 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
     <header
       className={clsx(
         'fixed top-0 z-50 w-screen overflow-hidden transition-all duration-300',
-        scrolled ? 'bg-white' : '',
+        scrolled ? 'bg-white shadow-sm' : '',
       )}
     >
-      <nav>
+      <nav aria-label="Main Navigation">
         {/* Top Nav */}
         <section className="container py-2">
           <div className="relative flex min-h-16 w-full items-center justify-between md:px-12">
@@ -65,6 +54,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
                 className={`transition-colors duration-300 ease-linear ${headerCo && !scrolled ? 'text-white' : 'text-primary'} lg:hidden ${isOpen ? '-translate-x-40' : 'translate-x-0'} text-sm uppercase transition-transform duration-300 ease-in-out focus:outline-none`}
                 onClick={() => setIsOpen(!isOpen)}
                 aria-label="Toggle Menu"
+                aria-expanded={isOpen}
               >
                 {!isOpen ? (
                   <span className="flex items-center gap-1">
@@ -82,19 +72,20 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
 
             {/* Centered Logo */}
             <div className="absolute left-1/2 -translate-x-1/2">
-              <Link href="/">
+              <Link href="/" aria-label="Skinny Cans Home">
                 <Image
                   src={Logo}
-                  alt="LOGO"
+                  alt="Skinny Cans Logo"
                   sizes="100%"
                   className="h-10 w-auto md:h-12 lg:h-14"
+                  priority
                 />
               </Link>
             </div>
 
             <div className="flex">
               <Link
-                href=""
+                href="/partner"
                 className={`flex items-center gap-2 font-varela text-xs transition-colors duration-300 ease-linear ${headerCo && !scrolled ? 'text-white' : 'text-primary'} uppercase`}
               >
                 <span>{siteConfig.location}</span>
@@ -113,8 +104,8 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
           >
             {siteConfig.mainNav.map((item, index) => {
               const isActive =
-                normalizedPath === item.href ||
-                normalizedPath.startsWith(item.href + '/')
+                pathname === item.href ||
+                (item.href !== '/' && pathname.startsWith(item.href))
 
               return (
                 <li key={index}>
@@ -123,13 +114,13 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
                     className={clsx(
                       'font-amiri text-base uppercase transition-colors duration-300',
                       (isActive && scrolled) || (isActive && headerNo)
-                        ? 'text-primary'
+                        ? 'font-bold text-primary'
                         : isActive && headerCo && !scrolled
-                          ? 'text-white'
+                          ? 'font-bold text-white'
                           : (!isActive && scrolled) || (isActive && headerNo)
                             ? 'text-[#7A9B87] hover:text-primary'
                             : !isActive && headerCo && !scrolled
-                              ? 'text-white/50 hover:text-white'
+                              ? 'text-white/70 hover:text-white'
                               : 'text-[#7A9B87] hover:text-primary',
                     )}
                   >
@@ -141,19 +132,16 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
           </ul>
 
           {/* Mobile Nav Links */}
-
           <div
-            className={`fixed ${isOpen ? 'translate-x-0' : '-translate-x-[100vw]'} inset-0 h-screen bg-white transition-transform delay-100 duration-300 ease-in-out`}
+            className={`fixed ${isOpen ? 'translate-x-0' : '-translate-x-[100vw]'} inset-0 z-50 h-screen bg-white transition-transform delay-100 duration-300 ease-in-out`}
           >
             <section className="container border-b border-[#E6E6E6] py-2">
               <div className="relative flex min-h-16 w-full items-center justify-between">
-                {/* Language or Mobile Menu Button */}
                 <div className="flex items-center gap-4">
-                  {/* Hamburger button for mobile */}
                   <button
-                    className={`text-sm uppercase text-primary focus:outline-none lg:hidden`}
-                    onClick={() => setIsOpen(!isOpen)}
-                    aria-label="Toggle Menu"
+                    className="text-sm uppercase text-primary focus:outline-none lg:hidden"
+                    onClick={() => setIsOpen(false)}
+                    aria-label="Close Menu"
                   >
                     <span className="flex items-center gap-1">
                       <IoClose className="text-xl" />
@@ -162,12 +150,15 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
                   </button>
                 </div>
 
-                {/* Centered Logo */}
                 <div className="absolute left-1/2 -translate-x-1/2">
-                  <Link href="/" onClick={() => setIsOpen(false)}>
+                  <Link
+                    href="/"
+                    onClick={() => setIsOpen(false)}
+                    aria-label="Skinny Cans Home"
+                  >
                     <Image
                       src={Logo}
-                      alt="LOGO"
+                      alt="Skinny Cans Logo"
                       sizes="100%"
                       className="h-10 w-auto md:h-12 lg:h-14"
                     />
@@ -176,7 +167,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
 
                 <div className="flex">
                   <Link
-                    href=""
+                    href="/partner"
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-2 font-varela text-xs uppercase text-primary"
                   >
@@ -189,8 +180,8 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
             <ul className="container flex flex-col items-start gap-6 py-8">
               {siteConfig.mainNav.map((item, index) => {
                 const isActive =
-                  normalizedPath === item.href ||
-                  normalizedPath.startsWith(item.href + '/')
+                  pathname === item.href ||
+                  (item.href !== '/' && pathname.startsWith(item.href))
                 return (
                   <li key={index}>
                     <Link
@@ -198,10 +189,10 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
                       className={clsx(
                         'font-amiri text-base uppercase transition-colors duration-300',
                         isActive
-                          ? 'text-primary'
+                          ? 'font-bold text-primary'
                           : 'text-[#7A9B87] hover:text-primary',
                       )}
-                      onClick={() => setIsOpen(false)} // Close menu on click
+                      onClick={() => setIsOpen(false)}
                     >
                       {item.title}
                     </Link>
@@ -209,7 +200,6 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
                 )
               })}
             </ul>
-            {/* Show language on mobile too */}
             <div className="container border-t border-[#E6E6E6] py-4">
               <LanguageSelector locale={locale} width="w-full" />
             </div>
