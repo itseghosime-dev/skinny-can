@@ -27,8 +27,8 @@ export default function Page({ params }: PageProps) {
           className="absolute bottom-0 left-0"
         />
         <div className="container relative z-10 space-y-28">
-          <section className="font-varela text-primary space-y-5 text-center uppercase tracking-wider md:space-y-9 ">
-            <div className="after:bg-primary relative after:absolute after:-bottom-1 after:left-1/2 after:h-0.5 after:w-7 after:-translate-x-1/2 after:rounded-full">
+          <section className="space-y-5 text-center font-varela uppercase tracking-wider text-primary md:space-y-9 ">
+            <div className="relative after:absolute after:-bottom-1 after:left-1/2 after:h-0.5 after:w-7 after:-translate-x-1/2 after:rounded-full after:bg-primary">
               <p className="text-sm lg:text-base">{t('collection')}</p>
             </div>
             <h1 className="font-amiri text-3xl md:text-5xl lg:text-7xl">
@@ -57,7 +57,7 @@ export default function Page({ params }: PageProps) {
                     sizes="100%"
                   />
                 </div>
-                <h3 className="font-amiri text-primary text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+                <h3 className="font-amiri text-2xl text-primary md:text-3xl lg:text-4xl xl:text-5xl">
                   {t(`${slug}_product_intro_title`)}
                 </h3>
                 <p className="text-base text-[#96A69C] md:text-lg">
@@ -77,7 +77,7 @@ export default function Page({ params }: PageProps) {
                 <ul className="list-disc space-y-1 py-3 pl-4">
                   {productHighlights.map((item, idx) => (
                     <li
-                      className="text-primary text-base md:text-lg lg:text-xl"
+                      className="text-base text-primary md:text-lg lg:text-xl"
                       key={idx}
                     >
                       {item}
@@ -85,7 +85,7 @@ export default function Page({ params }: PageProps) {
                   ))}
                 </ul>
 
-                <button className="bg-primary flex items-center justify-center gap-2 px-8 py-3 text-xs uppercase tracking-wider text-white transition-colors duration-300 hover:bg-[#96A69C] md:text-sm lg:text-base">
+                <button className="flex items-center justify-center gap-2 bg-primary px-8 py-3 text-xs uppercase tracking-wider text-white transition-colors duration-300 hover:bg-[#96A69C] md:text-sm lg:text-base">
                   {t(`${slug}_find_reseller`)}{' '}
                   <Icons.rightArrow className="h-5 w-5" />
                 </button>

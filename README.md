@@ -2,12 +2,12 @@
 
 This is a [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/), [ShadcnUI](https://ui.shadcn.com/), [NextIntl](https://next-intl-docs.vercel.app/) starter website template. It comes pre-configured with basic i18n, shadcn ui configuration.
 
-## Motivation
-
+## Motivation 
+ 
 I noticed there are certain default configuration that I tend to reuse across different projects both at my professional work and personal world. These default configs usually takes a couple of hours to bootstrap and/ or copy paste from previous projects, thus it made sense to have a template preconfigured with them. I wanted to have a template which will allow me to clone and immediately start building new features.
 
 ## Features
-
+ 
 - Next.js with Typescript
 - Easy styling customization with Tailwind 3.0
 - Sane default for all common UI components with ShadCN UI
