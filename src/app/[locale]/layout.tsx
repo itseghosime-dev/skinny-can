@@ -139,17 +139,17 @@ export default async function RootLayout({
           varelaRound.variable,
         )}
       >
-        <div className="relative flex min-h-screen flex-col">
-          <SiteHeader locale={locale} />
-          <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <div className="relative flex min-h-screen flex-col">
+            <SiteHeader locale={locale} />
             <div className="flex-1">
               <Restriction config={siteConfig} />
               {children}
             </div>
-          </NextIntlClientProvider>
-          <Footer locale={locale} />
-        </div>
-        <Toaster />
+            <Footer locale={locale} />
+          </div>
+          <Toaster />
+        </NextIntlClientProvider>
       </body>
     </html>
   )
