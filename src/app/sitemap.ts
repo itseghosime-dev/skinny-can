@@ -1,16 +1,19 @@
 import { MetadataRoute } from 'next'
 import { env } from '@/config/env'
-import { locales } from '@/i18n/request'
+import { defaultLocale, locales } from '@/i18n/request'
 import { PRODUCTS } from '@/features/products/data/products'
+
+// Only fully translated, indexable locales should be submitted to the sitemap to prevent "Submitted URL marked noindex" search console errors.
+export const INDEXABLE_LOCALES = ['en'] as const
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = env.NEXT_PUBLIC_SITE_URL
   const routes = ['', '/product', '/story', '/bbs', '/partner', '/waitlist']
   const sitemapEntries: MetadataRoute.Sitemap = []
 
-  // Static routes per locale with alternates
+  // Static routes for indexable locales
   for (const route of routes) {
-    for (const locale of locales) {
+    for (const locale of INDEXABLE_LOCALES) {
       sitemapEntries.push({
         url: `${baseUrl}/${locale}${route}`,
         lastModified: new Date(),
@@ -18,16 +21,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: route === '' ? 1.0 : 0.8,
         alternates: {
           languages: Object.fromEntries(
-            locales.map((l) => [l, `${baseUrl}/${l}${route}`]),
+            INDEXABLE_LOCALES.map((l) => [l, `${baseUrl}/${l}${route}`]),
           ),
         },
       })
     }
   }
 
-  // Dynamic product routes
+  // Dynamic product routes for indexable locales
   for (const product of PRODUCTS) {
-    for (const locale of locales) {
+    for (const locale of INDEXABLE_LOCALES) {
       sitemapEntries.push({
         url: `${baseUrl}/${locale}/product/${product.slug}`,
         lastModified: new Date(),
@@ -35,7 +38,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.9,
         alternates: {
           languages: Object.fromEntries(
-            locales.map((l) => [l, `${baseUrl}/${l}/product/${product.slug}`]),
+            INDEXABLE_LOCALES.map((l) => [l, `${baseUrl}/${l}/product/${product.slug}`]),
           ),
         },
       })

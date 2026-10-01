@@ -24,7 +24,8 @@ export async function POST(req: NextRequest) {
       req.headers.get('x-real-ip') ||
       '127.0.0.1'
 
-    if (!checkRateLimit(ip)) {
+    const rateLimitAllowed = await checkRateLimit(ip)
+    if (!rateLimitAllowed) {
       return NextResponse.json(
         {
           error:
