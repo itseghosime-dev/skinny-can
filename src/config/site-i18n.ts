@@ -54,7 +54,7 @@ const siteConfigBase: Record<Locale, SiteConfig> = {
         href: '/story',
       },
       {
-        title: 'science',
+        title: 'Science',
         href: '/bbs',
       },
       {
@@ -76,7 +76,7 @@ const siteConfigBase: Record<Locale, SiteConfig> = {
         href: '/story',
       },
       {
-        title: 'science ',
+        title: 'Science',
         href: '/bbs',
       },
       {
@@ -97,7 +97,7 @@ const siteConfigBase: Record<Locale, SiteConfig> = {
     location: 'Store locator',
     footer: {
       drink_responsibly: 'PLEASE DRINK RESPONSIBLY.',
-      rights: 'All rights reserved',
+      rights: 'All rights reserved.',
     },
     follow: 'Follow us',
     menu: 'menu',
@@ -115,24 +115,24 @@ const siteConfigBase: Record<Locale, SiteConfig> = {
       check: 'Just checking, you are over 21?',
       yes: 'Yes, I’m over 21 years old',
       no: 'No, I’m under 21 years old',
-      read: 'Also, this site uses cookies to give you the best possible experience. By proceedind to the site you agree to cookies being used. Read more about cookies',
+      read: 'Also, this site uses cookies to give you the best possible experience. By proceeding to the site you agree to cookies being used. Read more about cookies',
       more: 'here',
     },
   },
   no: {
-    name: 'Tynne bokser',
+    name: 'Skinny Cans',
     description: 'En ny æra med alkohol – ren, bevisst og håndlaget.',
     mainNav: [
       {
-        title: 'hjem',
+        title: 'Hjem',
         href: '/',
       },
       {
-        title: 'produkt',
+        title: 'Produkter',
         href: '/product',
       },
       {
-        title: 'historien',
+        title: 'Historien',
         href: '/story',
       },
       {
@@ -178,20 +178,20 @@ const siteConfigBase: Record<Locale, SiteConfig> = {
     },
     location: 'Butikksøker',
     footer: {
-      drink_responsibly: 'Vennligst drikk ansvarlig.',
+      drink_responsibly: 'VENNLIGST DRIKK ANSVARLIG.',
       rights: 'Alle rettigheter forbeholdt.',
     },
     follow: 'Følg oss',
     menu: 'meny',
     close: 'lukk',
     brewed: 'Håndbrygget',
-    backed: 'Støttet av\n vitenskapen',
-    built: 'Bygget for \nhelse',
+    backed: 'Støttet av\nvitenskapen',
+    built: 'Bygget for\nhelse',
     banner_description: 'Skinny er her for å forandre drikking for godt.',
     button_banner: 'Les hele historien',
     placeholder: 'Skriv inn e-postadressen din',
-    submit: 'sende inn',
-    request: 'sende inn en forespørsel',
+    submit: 'send inn',
+    request: 'send inn en forespørsel',
     restrictions: {
       welcome: 'Velkommen!',
       check: 'Bare sjekker, er du over 21?',
@@ -206,15 +206,15 @@ const siteConfigBase: Record<Locale, SiteConfig> = {
     description: 'Ođđa áigodat alkoholas — buhtis, diđolaš ja hábmejuvvon.',
     mainNav: [
       {
-        title: 'ruoktu',
+        title: 'Ruoktu',
         href: '/',
       },
       {
-        title: 'buvtta',
+        title: 'Buvttat',
         href: '/product',
       },
       {
-        title: 'muitalus',
+        title: 'Muitalus',
         href: '/story',
       },
       {
@@ -222,7 +222,7 @@ const siteConfigBase: Record<Locale, SiteConfig> = {
         href: '/bbs',
       },
       {
-        title: 'guoibmi',
+        title: 'Guoibmi',
         href: '/partner',
       },
     ],
@@ -261,19 +261,19 @@ const siteConfigBase: Record<Locale, SiteConfig> = {
     location: 'Gávpi gávdnan',
     footer: {
       drink_responsibly: 'JUOGA OVDDASVÁSTÁDUSLAČČAT.',
-      rights: 'uot vuoigatvuođat leat suddjejuvvon',
+      rights: 'Buot vuoigatvuođat leat suddjejuvvon.',
     },
     follow: 'Čuovo min',
     menu: 'meny',
     close: 'lahka',
-    brewed: 'Gieđain \nráhkaduvvon',
-    backed: 'Dieđalaš \ndoarjja',
-    built: 'Huksejuvvon \ndearvvašvuođa várás',
+    brewed: 'Gieđain\nráhkaduvvon',
+    backed: 'Dieđalaš\ndoarjja',
+    built: 'Huksejuvvon\ndearvvašvuođa várás',
     banner_description: 'Skinny lea dáppe rievdadeamen juhkanvuođa buorrin.',
     button_banner: 'Loga olles muitalusa',
     placeholder: 'Čále iežat e-poastta',
-    submit: 'guođđit',
-    request: 'sáddet jearaldaga',
+    submit: 'sádde',
+    request: 'sádde jearaldaga',
     restrictions: {
       welcome: 'Bures boahtin!',
       check: 'Dárkkistan dušše, leat go badjel 21 jagi?',
@@ -283,6 +283,12 @@ const siteConfigBase: Record<Locale, SiteConfig> = {
       more: 'dáppe',
     },
   },
+}
+
+export const INDEXABLE_LOCALES: readonly Locale[] = ['en'] as const
+
+export function isLocaleIndexable(locale: Locale): boolean {
+  return (INDEXABLE_LOCALES as readonly string[]).includes(locale)
 }
 
 export function getSiteConfig(locale: Locale): SiteConfig {
